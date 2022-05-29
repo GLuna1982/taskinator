@@ -117,8 +117,6 @@ var createTaskActions = function(taskId) {
     return actionContainerEl;
 };
 
-//formEl.addEventListener("submit", taskFormHandler);
-
 
 // function to delete tasks
 var deleteTask = function(taskId) {
@@ -159,6 +157,8 @@ var editTask = function(taskId) {
     
     //adds task id to the task being edited
     formEl.setAttribute("data-task-id",taskId);
+    formEl.querySelector("save-task").textContent = "Save Tasks";
+
 };
 
 // function that saves edit
@@ -177,12 +177,14 @@ var completeEditTask = function(taskName, taskType, taskId) {
         }
     };
 
-    saveTasks();
+    
 
     alert("Task Updated!");
 
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
+
+    saveTasks();
 };
 
 var taskButtonHandler = function(event) {
@@ -208,11 +210,13 @@ var taskStatusChangeHandler = function(event) {
     // get the task item's id
     var taskId = event.target.getAttribute("data-task-id");
 
+     //find the parent task item element based on the id
+     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
     //get the currently selected option's value and convert to lowercase
     var statusValue = event.target.value.toLowerCase();
 
-    //find the parent task item element based on the id
-    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+   
 
     if (statusValue === "to do") {
         tasksToDoEl.appendChild(taskSelected);
@@ -247,6 +251,7 @@ var loadTasks = function() {
     if (!savedTasks) {
         return false;
     }
+    console.log("Saved tasks found!");
 
     // iterate tasks through an array and create task elements on page
     savedTasks = JSON.parse(savedTasks);
@@ -258,11 +263,19 @@ var loadTasks = function() {
         
     }
 
-}
+};
 
-loadTasks();
+
 
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
+
+loadTasks();
+
+
+
+
+
+
